@@ -1,12 +1,14 @@
 package com.vinnypc.joguinho.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -29,7 +31,18 @@ public class Missao {
 	@NotNull(message = "O atributo pontuação é obrigatório")
 	private Integer pontuacao;
 
-	
+	@ManyToOne
+	@JsonIgnoreProperties("missao")
+	private Categoria categoria;
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	private Date dataVencimento;
 
 	@NotNull(message = "O atributo status não pode estar nulo")
@@ -53,8 +66,6 @@ public class Missao {
 		this.nome = nome;
 	}
 
-	
-
 	public Integer getPontuacao() {
 		return pontuacao;
 	}
@@ -62,8 +73,6 @@ public class Missao {
 	public void setPontuacao(Integer pontuacao) {
 		this.pontuacao = pontuacao;
 	}
-
-	
 
 	public Date getDataVencimento() {
 		return dataVencimento;
