@@ -1,6 +1,7 @@
 package com.vinnypc.joguinho.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,11 +26,11 @@ public class Missao {
 	@Size(min = 2, max = 50, message = "O atributo nome da entidade missao deve conter entre 2 e 50 caracteres")
 	private String nome;
 
-	@NotBlank(message = "O atributo pontuação é obrigatório")
-	private Long pontuacao;
+	@NotNull(message = "O atributo pontuação é obrigatório")
+	private Integer pontuacao;
 
-	@NotBlank(message = "O atributo dataVencimento é obrigatório")
-	private LocalDateTime dataVencimento;
+	
+	private Date dataVencimento;
 
 	@NotNull(message = "O atributo status não pode estar nulo")
 	@Min(0)
@@ -52,19 +53,23 @@ public class Missao {
 		this.nome = nome;
 	}
 
-	public Long getPontuacao() {
+	
+
+	public Integer getPontuacao() {
 		return pontuacao;
 	}
 
-	public void setPontuacao(Long pontuacao) {
+	public void setPontuacao(Integer pontuacao) {
 		this.pontuacao = pontuacao;
 	}
 
-	public LocalDateTime getDataVencimento() {
+	
+
+	public Date getDataVencimento() {
 		return dataVencimento;
 	}
 
-	public void setDataVencimento(LocalDateTime dataVencimento) {
+	public void setDataVencimento(Date dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
 
