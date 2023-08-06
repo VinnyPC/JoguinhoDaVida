@@ -37,6 +37,8 @@ public class Usuario {
 	
 	@PositiveOrZero(message = "O Atributo nivel atual da entidade usuario deve ser maior/igual a zero")
 	private Integer nivelAtual;
+	
+	
 
 	public Long getId() {
 		return id;
