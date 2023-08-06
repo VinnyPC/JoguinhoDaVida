@@ -3,9 +3,6 @@ package com.vinnypc.joguinho.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.vinnypc.joguinho.model.MissoesUsuario;
-import com.vinnypc.joguinho.repository.MissioesUsuarioRepository;
+import com.vinnypc.joguinho.repository.MissoesUsuarioRepository;
 
 import jakarta.validation.Valid;
 
@@ -31,8 +28,8 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MissoesUsuarioController {
 
-	@Autowired
-	private MissioesUsuarioRepository missoesUsuarioRepository;
+	@Autowired 
+	private MissoesUsuarioRepository missoesUsuarioRepository;
 
 	@GetMapping
 	public ResponseEntity<List<MissoesUsuario>> getAll() {

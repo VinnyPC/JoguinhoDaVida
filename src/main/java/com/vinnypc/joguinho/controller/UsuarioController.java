@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.vinnypc.joguinho.model.Missao;
 import com.vinnypc.joguinho.model.Usuario;
+import com.vinnypc.joguinho.repository.MissaoRepository;
 import com.vinnypc.joguinho.repository.UsuarioRepository;
+import com.vinnypc.joguinho.service.MissoesUsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +33,12 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private MissoesUsuarioService missoesUsuarioService;
+	
+	@Autowired
+	private MissaoRepository missaoRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Usuario>> getAll(){
@@ -67,6 +76,21 @@ public class UsuarioController {
 		}	
 		usuarioRepository.deleteById(id);
 		
+	}
+	
+	@PostMapping("/{usuarioId}/ativarMissao/{missaoId}")
+	public ResponseEntity<String> ativarMissao(@PathVariable Long usuarioId, @PathVariable Long missaoId) {
+		Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        Missao missao = missaoRepository.findById(missaoId).orElse(null);
+        
+        if (usuario != null && missao != null) {
+            // Chame o serviço para ativar a missão para o usuário
+        	
+            missoesUsuarioService.ativarMissao(usuario, missao);
+            return ResponseEntity.ok("Missão ativada com sucesso para o usuário!");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 	}
 
 }

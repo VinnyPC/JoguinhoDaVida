@@ -19,11 +19,9 @@ public class MissaoBase {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank(message = "O atributo nome da missao é obrigatório")
 	@Size(min = 2, max = 50, message = "O atributo nome da entidade missao deve conter entre 2 e 50 caracteres")
 	private String nome;
 
-	@NotNull(message = "O atributo pontuação é obrigatório")
 	private Integer pontuacao;
 
 
