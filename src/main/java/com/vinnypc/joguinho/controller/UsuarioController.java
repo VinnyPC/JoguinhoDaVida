@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.vinnypc.joguinho.model.UsuarioLogin;
 import com.vinnypc.joguinho.model.Missao;
 import com.vinnypc.joguinho.model.Usuario;
 import com.vinnypc.joguinho.repository.MissaoRepository;
 import com.vinnypc.joguinho.repository.UsuarioRepository;
 import com.vinnypc.joguinho.service.MissoesUsuarioService;
+import com.vinnypc.joguinho.service.UsuarioService;
 
 import jakarta.validation.Valid;
 
@@ -36,6 +38,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private MissoesUsuarioService missoesUsuarioService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	private MissaoRepository missaoRepository;
@@ -56,6 +61,24 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario){
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(usuarioRepository.save(usuario));
+	}
+	
+	@PostMapping("/logar")
+	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){
+		
+		return usuarioService.autenticarUsuario(usuarioLogin)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+	}
+    
+
+	@PostMapping("/cadastrar")
+	public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario usuario) {
+
+		return usuarioService.cadastrarUsuario(usuario)
+			.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+			.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
 	}
 	
 	@PutMapping
