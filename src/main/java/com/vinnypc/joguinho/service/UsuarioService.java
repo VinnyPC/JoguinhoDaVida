@@ -16,6 +16,8 @@ import com.vinnypc.joguinho.model.UsuarioLogin;
 import com.vinnypc.joguinho.repository.UsuarioRepository;
 import com.vinnypc.joguinho.security.JwtService;
 
+//TODO falha na autenticação do usuario
+
 @Service
 public class UsuarioService {
 
@@ -23,68 +25,80 @@ public class UsuarioService {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
-	private JwtService jwtService;
+    private JwtService jwtService;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 
-		if (usuarioRepository.findByUsuario(usuario.getEmail()).isPresent())
+		if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent())
 			return Optional.empty();
 
 		usuario.setSenha(criptografarSenha(usuario.getSenha()));
 
 		return Optional.of(usuarioRepository.save(usuario));
-
+	
 	}
 
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
+		
+		if(usuarioRepository.findById(usuario.getId()).isPresent()) {
 
-		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
+			Optional<Usuario> buscaUsuario = usuarioRepository.findByEmail(usuario.getEmail());
 
-			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getEmail());
-
-			if ((buscaUsuario.isPresent()) && (buscaUsuario.get().getId() != usuario.getId()))
+			if ( (buscaUsuario.isPresent()) && ( buscaUsuario.get().getId() != usuario.getId()))
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe!", null);
 
 			usuario.setSenha(criptografarSenha(usuario.getSenha()));
 
 			return Optional.ofNullable(usuarioRepository.save(usuario));
-
+			
 		}
 
 		return Optional.empty();
-
-	}
+	
+	}	
 
 	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
-		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getEmail(),
-				usuarioLogin.get().getSenha());
+        
 
+		var credenciais = new UsernamePasswordAuthenticationToken(usuarioLogin.get().getEmail(), usuarioLogin.get().getSenha());
+		
 		Authentication authentication = authenticationManager.authenticate(credenciais);
+        
 
 		if (authentication.isAuthenticated()) {
-			Optional<Usuario> usuario = usuarioRepository.findByUsuario(usuarioLogin.get().getEmail());
+
+
+			Optional<Usuario> usuario = usuarioRepository.findByEmail(usuarioLogin.get().getEmail());
+
+
 			if (usuario.isPresent()) {
-				usuarioLogin.get().setId(usuario.get().getId());
-				usuarioLogin.get().setNome(usuario.get().getNome());
-				usuarioLogin.get().setPontos(usuario.get().getPontos());
-				usuarioLogin.get().setNivelAtual(usuario.get().getNivelAtual());
-				usuarioLogin.get().setSenha("");
-				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getEmail()));
-				return usuarioLogin;
+
+
+			   usuarioLogin.get().setId(usuario.get().getId());
+                usuarioLogin.get().setNome(usuario.get().getNome());
+                usuarioLogin.get().setNivelAtual(usuario.get().getNivelAtual());
+                usuarioLogin.get().setPontos(usuario.get().getPontos());
+                usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getEmail()));
+                usuarioLogin.get().setSenha("");
+				
+
+			   return usuarioLogin;
+			
 			}
 
-		}
+        } 
+            
 		return Optional.empty();
 
-	}
+    }
 
 	private String criptografarSenha(String senha) {
 
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
+		
 		return encoder.encode(senha);
 
 	}

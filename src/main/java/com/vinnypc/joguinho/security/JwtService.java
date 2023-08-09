@@ -1,8 +1,6 @@
 package com.vinnypc.joguinho.security;
 
 import java.security.Key;
-
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +16,16 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 
+@Component
 public class JwtService {
 	
-	public static final String SECRET = "C5E6796B7AC6FC1079D3BCB1CBAD4E7753B37A1C3C8B2AFCCF0DAAAC5735EF0A";
+	public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 	
 	private Key getSignKey() {
 		byte[] keyBytes = Decoders.BASE64.decode(SECRET);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
-	
+
 	private Claims extractAllClaims(String token) {
 		return Jwts.parserBuilder()
 				.setSigningKey(getSignKey()).build()

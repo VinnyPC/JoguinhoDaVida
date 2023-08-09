@@ -57,11 +57,11 @@ public class UsuarioController {
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 	
-	@PostMapping
-	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario){
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(usuarioRepository.save(usuario));
-	}
+//	@PostMapping
+//	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario){
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//				.body(usuarioRepository.save(usuario));
+//	}
 	
 	@PostMapping("/logar")
 	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){

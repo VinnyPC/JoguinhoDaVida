@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -85,5 +87,7 @@ public class Usuario {
 	public void setNivelAtual(Integer nivelAtual) {
 		this.nivelAtual = nivelAtual;
 	}
+
+	
 
 }
