@@ -2,6 +2,7 @@ package com.vinnypc.joguinho.model;
 
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +38,7 @@ public class Usuario {
 	@Size(min = 2, max = 100, message = "O atributo nome do entidade usuario deve conter entre 2 e 100 caracteres")
 	private String nome;
 
+	@Schema(example = "email@email.com")
 	@NotNull(message = "O Atributo Usuário é Obrigatório!")
 	@Email(message = "O atributo email deve ser um email válido!")
 	private String email;
