@@ -54,9 +54,9 @@ public class MissaoController {
 				.body(missaoRepository.save(missao));
 	}
 	
-	@PutMapping
-	public ResponseEntity<Missao> put(@Valid @RequestBody Missao missao){
-		return missaoRepository.findById(missao.getId())
+	@PutMapping("/{id}/atualizar")
+	public ResponseEntity<Missao> put(@PathVariable Long id, @Valid @RequestBody Missao missao){
+		return missaoRepository.findById(id)
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK)
 						.body(missaoRepository.save(missao)))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());

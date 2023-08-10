@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
@@ -45,7 +45,7 @@ public class UsuarioController {
 	@Autowired
 	private MissaoRepository missaoRepository;
 	
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Usuario>> getAll(){
 		return ResponseEntity.ok(usuarioRepository.findAll());
 	}
@@ -56,13 +56,7 @@ public class UsuarioController {
 				.map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	
-//	@PostMapping
-//	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario){
-//		return ResponseEntity.status(HttpStatus.CREATED)
-//				.body(usuarioRepository.save(usuario));
-//	}
-	
+
 	@PostMapping("/logar")
 	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){
 		
@@ -81,12 +75,13 @@ public class UsuarioController {
 
 	}
 	
-	@PutMapping
-	public ResponseEntity<Usuario> put(@Valid @RequestBody Usuario usuario){
-		return usuarioRepository.findById(usuario.getId())
-				.map(resposta -> ResponseEntity.status(HttpStatus.OK)
-						.body(usuarioRepository.save(usuario)))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	@PutMapping("/atualizar")
+	public ResponseEntity<Usuario> putUsuario(@Valid @RequestBody Usuario usuario) {
+		
+		return usuarioService.atualizarUsuario(usuario)
+			.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+			.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+		
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
