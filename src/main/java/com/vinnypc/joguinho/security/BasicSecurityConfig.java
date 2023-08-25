@@ -57,6 +57,7 @@ public class BasicSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable()
                 .cors();
+        
 
         http
                 .authorizeHttpRequests((auth) -> auth

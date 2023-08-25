@@ -1,21 +1,37 @@
 package com.vinnypc.joguinho.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vinnypc.joguinho.model.enums.ProfileEnum;
+
+import jakarta.persistence.JoinColumn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "tb_usuario")
 public class Usuario {
 
@@ -28,7 +44,8 @@ public class Usuario {
 		this.nivelAtual = nivelAtual;
 	}
 
-	public Usuario() { }
+	public Usuario() {
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +69,21 @@ public class Usuario {
 
 	@PositiveOrZero(message = "O Atributo nivel atual da entidade usuario deve ser maior/igual a zero")
 	private Integer nivelAtual;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@CollectionTable(name = "user_profile")
+	@Column(name = "profile", nullable = false)
+	private Set<Integer> profiles = new HashSet<>();
+
+	public Set<ProfileEnum> getProfiles() {
+		return this.profiles.stream().map(x -> ProfileEnum.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addProfile(ProfileEnum profileEnum) {
+		this.profiles.add(profileEnum.getCode());
+
+	}
 
 	public Long getId() {
 		return id;
@@ -101,6 +133,10 @@ public class Usuario {
 		this.nivelAtual = nivelAtual;
 	}
 
+	public void setProfiles(Set<Integer> profiles) {
+		this.profiles = profiles;
+	}
+	
 	
 
 }
