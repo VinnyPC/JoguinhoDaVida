@@ -41,6 +41,9 @@ public class UsuarioService {
 		usuario.setSenha(criptografarSenha(usuario.getSenha()));
 		
 		usuario.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
+		
+		usuario.setPontos(0);
+		usuario.setNivelAtual(0);
 
 		return Optional.of(usuarioRepository.save(usuario));
 
