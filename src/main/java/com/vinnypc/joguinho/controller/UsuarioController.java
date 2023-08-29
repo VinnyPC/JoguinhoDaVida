@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class UsuarioController {
 	@Autowired
 	private MissaoRepository missaoRepository;
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/all")
 	public ResponseEntity<List<Usuario>> getAll(){
 		return ResponseEntity.ok(usuarioRepository.findAll());
@@ -84,6 +86,7 @@ public class UsuarioController {
 		
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
