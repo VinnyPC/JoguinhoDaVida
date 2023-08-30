@@ -57,13 +57,11 @@ public class UsuarioController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
 		Usuario usuario = this.usuarioService.findById(id);
-		return ResponseEntity.ok().body(usuario);
-				
+		return ResponseEntity.ok().body(usuario);	
 	}
 
 	@PostMapping("/logar")
 	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){
-		
 		return usuarioService.autenticarUsuario(usuarioLogin)
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -91,15 +89,19 @@ public class UsuarioController {
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
-		
-		if(usuario.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		}	
-		usuarioRepository.deleteById(id);
-		
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
+		this.usuarioService.deletarUsuario(id);
+		return ResponseEntity.noContent().build();
 	}
+	
+//	public void delete(@PathVariable Long id) {
+//		Optional<Usuario> usuario = usuarioRepository.findById(id);
+//		
+//		if(usuario.isEmpty()) {
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//		}	
+//		usuarioRepository.deleteById(id);	
+//	}
 	
 	@PostMapping("/{usuarioId}/ativarMissao/{missaoId}")
 	public ResponseEntity<String> ativarMissao(@PathVariable Long usuarioId, @PathVariable Long missaoId) {
