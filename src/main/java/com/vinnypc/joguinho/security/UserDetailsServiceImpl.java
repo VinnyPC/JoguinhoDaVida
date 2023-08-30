@@ -1,5 +1,6 @@
 package com.vinnypc.joguinho.security;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-		Optional<Usuario> usuario = usuarioRepository.findByEmail(userName);
-
-		if (usuario.isPresent())
-			return new UserDetailsImpl(usuario.get());
-		else
+		Usuario usuario = this.usuarioRepository.findByEmail(userName);
+		if(Objects.isNull(usuario))
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		
+		return new UserDetailsImpl(usuario.getId(), usuario.getEmail(), usuario.getSenha(), usuario.getProfiles());
+		
+//		Optional<Usuario> usuario = usuarioRepository.findByEmail(userName);
+//
+//		if (usuario.isPresent())
+//			return new UserDetailsImpl(usuario.get());
+//		else
+//			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 			
 	}
 

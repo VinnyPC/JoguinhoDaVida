@@ -16,14 +16,16 @@ public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String userName;
 	private String password;
 	//private List<GrantedAuthority> authorities;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Usuario user, Set<ProfileEnum> profileEnums) {
-		this.userName = user.getEmail();
-		this.password = user.getSenha();
+	public UserDetailsImpl(Long id, String userName, String password, Set<ProfileEnum> profileEnums) {
+		this.id = id;
+		this.userName = userName;
+		this.password = password;
 		this.authorities = profileEnums.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
 	}
 

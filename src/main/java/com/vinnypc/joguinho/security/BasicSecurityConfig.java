@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,60 +22,65 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class BasicSecurityConfig {
-	
+
+	private AuthenticationManager authenticationManager;
+
 	@Autowired
-    private JwtAuthFilter authFilter;
+	private JwtAuthFilter authFilter;
 
-    @Bean
-    UserDetailsService userDetailsService() {
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-        return new UserDetailsServiceImpl();
-    }
+	@Bean
+	UserDetailsService userDetailsService() {
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+		return new UserDetailsServiceImpl();
+	}
 
-    @Bean
-    AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+	@Bean
+	AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+	}
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
-        http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().csrf().disable()
-                .cors();
-        
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/usuario/logar").permitAll()
-                        .requestMatchers("/usuario/cadastrar").permitAll()
-                        .requestMatchers("/error/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .anyRequest().authenticated())
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic();
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable().cors();
 
-        return http.build();
+		AuthenticationManagerBuilder authenticationManagerBuilder = http
+				.getSharedObject(AuthenticationManagerBuilder.class);
 
-    }
-	
-	
+		authenticationManagerBuilder.userDetailsService(this.userDetailsService)
+				.passwordEncoder(bCryptPasswordEncoder());
+		this.authenticationManager = authenticationManagerBuilder.build();
+
+		http.authorizeHttpRequests((auth) -> auth.requestMatchers("/usuario/logar").permitAll()
+				.requestMatchers("/usuario/cadastrar").permitAll().requestMatchers("/error/**").permitAll()
+				.requestMatchers(HttpMethod.OPTIONS).permitAll().anyRequest().authenticated())
+				.authenticationProvider(authenticationProvider())
+				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).httpBasic();
+
+		return http.build();
+
+	}
+
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 }
