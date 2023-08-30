@@ -46,7 +46,9 @@ public class UsuarioController {
 	@Autowired
 	private MissaoRepository missaoRepository;
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	
+	
+	
 	@GetMapping("/all")
 	public ResponseEntity<List<Usuario>> getAll(){
 		return ResponseEntity.ok(usuarioRepository.findAll());
@@ -54,9 +56,9 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
-		return usuarioRepository.findById(id)
-				.map(resposta -> ResponseEntity.ok(resposta))
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+		Usuario usuario = this.usuarioService.findById(id);
+		return ResponseEntity.ok().body(usuario);
+				
 	}
 
 	@PostMapping("/logar")
@@ -86,7 +88,7 @@ public class UsuarioController {
 		
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {

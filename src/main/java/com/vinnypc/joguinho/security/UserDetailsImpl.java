@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.vinnypc.joguinho.model.Usuario;
 import com.vinnypc.joguinho.model.enums.ProfileEnum;
 
+import lombok.Getter;
+
 public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -29,13 +31,38 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = profileEnums.stream().map(x -> new SimpleGrantedAuthority(x.getDescription())).collect(Collectors.toList());
 	}
 
-	public UserDetailsImpl(Usuario usuario) {
-	}
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
 		return authorities;
+	}
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
 	}
 
 	@Override

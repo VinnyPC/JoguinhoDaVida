@@ -66,7 +66,7 @@ public class BasicSecurityConfig {
 
 		authenticationManagerBuilder.userDetailsService(this.userDetailsService)
 				.passwordEncoder(bCryptPasswordEncoder());
-		this.authenticationManager = authenticationManagerBuilder.build();
+		//this.authenticationManager = authenticationManagerBuilder.build();
 
 		http.authorizeHttpRequests((auth) -> auth.requestMatchers("/usuario/logar").permitAll()
 				.requestMatchers("/usuario/cadastrar").permitAll().requestMatchers("/error/**").permitAll()

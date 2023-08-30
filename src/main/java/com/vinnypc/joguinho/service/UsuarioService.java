@@ -1,14 +1,17 @@
 package com.vinnypc.joguinho.service;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,6 +21,7 @@ import com.vinnypc.joguinho.model.UsuarioLogin;
 import com.vinnypc.joguinho.model.enums.ProfileEnum;
 import com.vinnypc.joguinho.repository.UsuarioRepository;
 import com.vinnypc.joguinho.security.JwtService;
+import com.vinnypc.joguinho.security.UserDetailsImpl;
 
 @Service
 public class UsuarioService {
@@ -25,13 +29,23 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	
-
 	@Autowired
 	private JwtService jwtService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	public Usuario findById(Long id) {
+		UserDetailsImpl userDetailsImpl = authenticated();
+		if(!Objects.nonNull(userDetailsImpl) || !userDetailsImpl.hasRole(ProfileEnum.ADMIN) && !id.equals(userDetailsImpl.getId()))
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Acesso negado!");
+		
+		Optional<Usuario> usuario = this.usuarioRepository.findById(id);
+		return usuario.orElseThrow(() -> new ObjectNotFoundException(
+				"Usuário não encontrado! Id: "+id+" tipo: "+Usuario.class.getName(), usuario));
+	}
+	
+	
 
 	public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
 
@@ -48,7 +62,7 @@ public class UsuarioService {
 		return Optional.of(usuarioRepository.save(usuario));
 
 	}
-	//TODO 
+
 	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
 
 		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
@@ -109,6 +123,14 @@ public class UsuarioService {
 
 	private String gerarToken(String usuario) {
 		return "Bearer " + jwtService.generateToken(usuario);
+	}
+	
+	public static UserDetailsImpl authenticated() {
+		try {
+			return (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }
