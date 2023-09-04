@@ -2,6 +2,8 @@ package com.vinnypc.joguinho.service;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,14 +20,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.vinnypc.joguinho.model.MissoesUsuario;
 import com.vinnypc.joguinho.model.Usuario;
 import com.vinnypc.joguinho.model.UsuarioLogin;
 import com.vinnypc.joguinho.model.enums.ProfileEnum;
+import com.vinnypc.joguinho.repository.MissoesUsuarioRepository;
 import com.vinnypc.joguinho.repository.UsuarioRepository;
 import com.vinnypc.joguinho.security.JwtService;
 import com.vinnypc.joguinho.security.UserDetailsImpl;
 import com.vinnypc.joguinho.service.exceptions.DataBindingViolationException;
 
+//Eu ainda não tenho uma data de vencimento da missao para ai sim poder calcular o vencimento
+//TODO Uma logica que calcule a data de validade de uma missao baseada na sua ativação para que possa com isso validar se o usuario cumpriu ou nao a missao
 @Service
 public class UsuarioService {
 
@@ -37,6 +43,9 @@ public class UsuarioService {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private MissoesUsuarioRepository missoesUsuarioRepository;
 
 	public Usuario findById(Long id) {
 		UserDetailsImpl userDetailsImpl = authenticated();
@@ -120,6 +129,19 @@ public class UsuarioService {
 		ZonedDateTime dataHoraUtcNegativo3 = ZonedDateTime.now(fusoHorario);
 		return dataHoraUtcNegativo3;
 	}
+	
+	public void prazoMissao() {
+		List<Date> datasDeVencimento = missoesUsuarioRepository.findAll()
+			    .stream()
+			    .map(MissoesUsuario::getDataVencimento)
+			    .collect(Collectors.toList());
+		
+		ZonedDateTime dataDaAutenticacao = dataAutenticacao();
+		
+		
+	}
+	
+	
 	
 	public void deletarUsuario(Long id) {
 		findById(id);
