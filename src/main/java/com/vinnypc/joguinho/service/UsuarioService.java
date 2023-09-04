@@ -101,9 +101,10 @@ public class UsuarioService {
 				usuarioLogin.get().setNome(usuario.get().getNome());
 				usuarioLogin.get().setNivelAtual(usuario.get().getNivelAtual());
 				usuarioLogin.get().setPontos(usuario.get().getPontos());
+				usuarioLogin.get().setDataAutenticacao(dataAutenticacao());
 				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getEmail()));
 				usuarioLogin.get().setSenha("");
-
+				System.out.println(usuarioLogin.get().getDataAutenticacao());
 				return usuarioLogin;
 
 			}

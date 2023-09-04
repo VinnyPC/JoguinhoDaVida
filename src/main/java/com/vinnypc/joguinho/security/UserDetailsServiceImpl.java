@@ -29,12 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		
 		return new UserDetailsImpl(usuario.get().getId(), usuario.get().getEmail(), usuario.get().getSenha(), usuario.get().getProfiles());
 		
-//		Optional<Usuario> usuario = usuarioRepository.findByEmail(userName);
-//
-//		if (usuario.isPresent())
-//			return new UserDetailsImpl(usuario.get());
-//		else
-//			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 			
 	}
 

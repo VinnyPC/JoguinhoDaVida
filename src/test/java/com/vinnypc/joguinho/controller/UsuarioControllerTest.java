@@ -2,6 +2,7 @@ package com.vinnypc.joguinho.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -44,8 +45,9 @@ public class UsuarioControllerTest {
 	@Test
 	@DisplayName("Cadastrar Usuário")
 	public void criarUsuarioTest() {
+		
 		HttpEntity<Usuario> requestBody = new HttpEntity<Usuario>(
-				new Usuario(0L, "Usuario Teste", "usuario_teste@email.com", "123456789", 0, 0));
+				new Usuario(0L, "Usuario Teste", "usuario_teste@email.com", "123456789", 0, 0 ));
 
 		ResponseEntity<Usuario> responseBody = testRestTemplate.exchange("/usuario/cadastrar", HttpMethod.POST,
 				requestBody, Usuario.class);

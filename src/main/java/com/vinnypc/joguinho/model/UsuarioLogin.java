@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.model;
 
+import java.time.ZonedDateTime;
+
 public class UsuarioLogin {
 
 	private Long id;
@@ -8,6 +10,7 @@ public class UsuarioLogin {
 	private String senha;
 	private Integer pontos;
 	private Integer nivelAtual;
+	private ZonedDateTime dataAutenticacao;
 	private String token;
 
 	public Long getId() {
@@ -56,6 +59,14 @@ public class UsuarioLogin {
 
 	public void setNivelAtual(Integer nivelAtual) {
 		this.nivelAtual = nivelAtual;
+	}
+	
+	public ZonedDateTime getDataAutenticacao() {
+		return dataAutenticacao;
+	}
+
+	public void setDataAutenticacao(ZonedDateTime dataAutenticacao) {
+		this.dataAutenticacao = dataAutenticacao;
 	}
 
 	public String getToken() {

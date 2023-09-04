@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.model;
 
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,6 +44,7 @@ public class Usuario {
 		this.senha = senha;
 		this.pontos = pontos;
 		this.nivelAtual = nivelAtual;
+		
 	}
 
 	public Usuario() {
@@ -69,6 +72,9 @@ public class Usuario {
 
 	@PositiveOrZero(message = "O Atributo nivel atual da entidade usuario deve ser maior/igual a zero")
 	private Integer nivelAtual;
+	
+	
+	private ZonedDateTime dataAutenticacao;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -136,6 +142,20 @@ public class Usuario {
 	public void setProfiles(Set<Integer> profiles) {
 		this.profiles = profiles;
 	}
+
+	public ZonedDateTime getDataAutenticacao() {
+		return dataAutenticacao;
+	}
+
+	public void setDataAutenticacao(ZonedDateTime dataAutenticacao) {
+		this.dataAutenticacao = dataAutenticacao;
+	}
+	
+	
+
+	
+	
+	
 	
 	
 
