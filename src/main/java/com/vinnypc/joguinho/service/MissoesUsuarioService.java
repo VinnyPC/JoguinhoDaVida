@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,15 @@ public class MissoesUsuarioService {
 	@Autowired
 	private MissoesUsuarioRepository missoesUsuarioRepository;
 	
-	public void ativarMissao(Usuario usuario, Missao missao) {
+	public void ativarMissao(Usuario usuario, Missao missao, Date data) {
 		MissoesUsuario missaoUsuario = new MissoesUsuario();
+		
+		
         missaoUsuario.setUsuario(usuario);
         missaoUsuario.setMissao(missao);
         missaoUsuario.setStatus(1);
-        
         missaoUsuario.setCategoria(missao.getCategoria());
+        missaoUsuario.setDataAtivacao(data);
         missaoUsuario.setDataVencimento(missao.getDataVencimento());
         missaoUsuario.setNome(missao.getNome());
         missaoUsuario.setPontuacao(missao.getPontuacao());

@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.model;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,6 +34,9 @@ public class MissoesUsuario extends MissaoBase {
 	@Min(0)
 	@Max(1)
 	private Integer status;
+	
+	@NotNull
+	private Date dataAtivacao;
 
 	public Categoria getCategoria() {
 		return categoria;
@@ -64,6 +69,16 @@ public class MissoesUsuario extends MissaoBase {
 	public void setMissao(Missao missao) {
 		this.missao = missao;
 	}
+
+	public Date getDataAtivacao() {
+		return dataAtivacao;
+	}
+
+	public void setDataAtivacao(Date dataAtivacao) {
+		this.dataAtivacao = dataAtivacao;
+	}
+	
+	
 
 	
 

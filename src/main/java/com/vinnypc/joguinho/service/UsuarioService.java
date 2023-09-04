@@ -1,5 +1,7 @@
 package com.vinnypc.joguinho.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -110,6 +112,12 @@ public class UsuarioService {
 
 		return Optional.empty();
 
+	}
+	
+	public ZonedDateTime dataAutenticacao() {
+		ZoneId fusoHorario = ZoneId.of("America/Sao_Paulo");
+		ZonedDateTime dataHoraUtcNegativo3 = ZonedDateTime.now(fusoHorario);
+		return dataHoraUtcNegativo3;
 	}
 	
 	public void deletarUsuario(Long id) {

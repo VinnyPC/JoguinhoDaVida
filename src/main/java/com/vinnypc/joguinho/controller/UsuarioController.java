@@ -1,5 +1,6 @@
 package com.vinnypc.joguinho.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,25 +94,16 @@ public class UsuarioController {
 		this.usuarioService.deletarUsuario(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-//	public void delete(@PathVariable Long id) {
-//		Optional<Usuario> usuario = usuarioRepository.findById(id);
-//		
-//		if(usuario.isEmpty()) {
-//			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//		}	
-//		usuarioRepository.deleteById(id);	
-//	}
-	
+		
 	@PostMapping("/{usuarioId}/ativarMissao/{missaoId}")
 	public ResponseEntity<String> ativarMissao(@PathVariable Long usuarioId, @PathVariable Long missaoId) {
 		Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
         Missao missao = missaoRepository.findById(missaoId).orElse(null);
+        Date data = new Date();
         
         if (usuario != null && missao != null) {
-            // Chame o serviço para ativar a missão para o usuário
-        	
-            missoesUsuarioService.ativarMissao(usuario, missao);
+            
+            missoesUsuarioService.ativarMissao(usuario, missao, data);
             return ResponseEntity.ok("Missão ativada com sucesso para o usuário!");
         } else {
             return ResponseEntity.notFound().build();
