@@ -1,28 +1,14 @@
 package com.vinnypc.joguinho.model;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vinnypc.joguinho.model.enums.ProfileEnum;
 
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -47,8 +33,7 @@ public class Usuario {
 		
 	}
 
-	public Usuario() {
-	}
+	public Usuario(){}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,6 +57,9 @@ public class Usuario {
 
 	@PositiveOrZero(message = "O Atributo nivel atual da entidade usuario deve ser maior/igual a zero")
 	private Integer nivelAtual;
+
+	@OneToMany(mappedBy = "usuario")
+	private List<MissoesUsuario> missoesUsuarioList;
 	
 	
 	private ZonedDateTime dataAutenticacao;
@@ -143,6 +131,14 @@ public class Usuario {
 		this.profiles = profiles;
 	}
 
+//	public List<MissoesUsuario> getMissoesUsuarioList() {
+//		return missoesUsuarioList;
+//	}
+
+//	public void setMissoesUsuarioList(List<MissoesUsuario> missoesUsuarioList) {
+//		this.missoesUsuarioList = missoesUsuarioList;
+//	}
+
 	public ZonedDateTime getDataAutenticacao() {
 		return dataAutenticacao;
 	}
@@ -150,6 +146,8 @@ public class Usuario {
 	public void setDataAutenticacao(ZonedDateTime dataAutenticacao) {
 		this.dataAutenticacao = dataAutenticacao;
 	}
+
+
 	
 	
 

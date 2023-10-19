@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.vinnypc.joguinho.service.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,8 @@ import com.vinnypc.joguinho.service.UsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
 	@Autowired
@@ -57,9 +58,26 @@ public class UsuarioController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
-		Usuario usuario = this.usuarioService.findById(id);
-		return ResponseEntity.ok().body(usuario);	
+		if(usuarioRepository.existsById(id)){
+			Usuario usuario = this.usuarioService.findById(id);
+			return ResponseEntity.ok().body(usuario);
+		}else{
+			throw new ObjectNotFoundException("O usuário não existe!");
+		}
+
 	}
+
+//	@GetMapping("/{id}")
+//	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+//		Usuario usuario = this.usuarioService.findById(id);
+//
+//		if (usuario != null) {
+//			return ResponseEntity.ok().body(usuario);
+//		} else {
+//
+//		}
+//	}
+
 
 	@PostMapping("/logar")
 	public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){

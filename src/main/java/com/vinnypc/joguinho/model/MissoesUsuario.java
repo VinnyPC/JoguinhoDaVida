@@ -22,7 +22,7 @@ public class MissoesUsuario extends MissaoBase {
 	private Categoria categoria;
 
 	@ManyToOne
-	@JsonIgnoreProperties("missoes_usuario")
+	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 
 	@ManyToOne
