@@ -41,3 +41,42 @@ Neste repositório, está guardado o backend do JoguinhoDaVida. Aqui, encontramo
 + **tb_categoria:** Representa a classificação das missões (por exemplo: profissional, saúde, hobby, etc.).
 + **tb_missoes:** Contém as missões previamente definidas que os usuários podem escolher. Essa abordagem foi escolhida para simplificar o processo, mas há planos de permitir que os usuários criem suas próprias missões no futuro.
 + **tb_missoes_usuario:** Cada usuário tem a liberdade de selecionar várias missões. Quando um usuário ativa uma missão, ela é duplicada da tabela "missoes" para a entidade "missoesUsuario", que, por sua vez, guarda um registro de todas as missões ativas para aquele usuário. Essa foi a abortagem que achei mais simples e confiável.
+
+## Diagrama de Classes
+
+```mermaid
+classDiagram
+  class Usuario {
+    +id: int
+    +email: string
+    +nivel_atual: int
+    +nome: string
+    +pontos: int
+    +senha: string
+  }
+
+  class Missao {
+    +id: int
+    +data_vencimento: date
+    +nome: string
+    +pontuacao: int
+  }
+
+  class Categoria {
+    +id: int
+    +nome: string
+  }
+
+  class MissoesUsuario {
+    +id: int
+    +data_vencimento: date
+    +nome: string
+    +pontuacao: int
+    +status: int
+  }
+
+  Usuario --> MissoesUsuario: "possui"
+  MissoesUsuario --> Missao: "tem"
+  MissoesUsuario --> Categoria: "pertence a"
+  Missao --> Categoria: "pertence a"
+```
