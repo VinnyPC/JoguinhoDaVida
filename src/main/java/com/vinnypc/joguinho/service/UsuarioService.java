@@ -1,12 +1,13 @@
 package com.vinnypc.joguinho.service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.vinnypc.joguinho.model.MissoesUsuario;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,12 @@ public class UsuarioService {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private MissoesUsuarioService missoesUsuarioService;
+
+	@Autowired
+	private MissoesUsuario missoesUsuario;
 
 	public Usuario findById(Long id) {
 		UserDetailsImpl userDetailsImpl = authenticated();
@@ -101,9 +108,13 @@ public class UsuarioService {
 				usuarioLogin.get().setNome(usuario.get().getNome());
 				usuarioLogin.get().setNivelAtual(usuario.get().getNivelAtual());
 				usuarioLogin.get().setPontos(usuario.get().getPontos());
-				usuarioLogin.get().setDataAutenticacao(dataAutenticacao());
+				usuario.get().setDataAutenticacao(dataAutenticacao());
 				usuarioLogin.get().setToken(gerarToken(usuarioLogin.get().getEmail()));
 				usuarioLogin.get().setSenha("");
+				//missoesUsuarioService.verificaVencimentoMissao(dataAutenticacao());
+				//TODO tem que arrumar isso aqui, quando a missao estiver vencida deve ficar com status 0
+
+
 				return usuarioLogin;
 
 			}
@@ -114,10 +125,10 @@ public class UsuarioService {
 
 	}
 
-	public ZonedDateTime dataAutenticacao() {
+	public Date dataAutenticacao() {
 		ZoneId fusoHorario = ZoneId.of("America/Sao_Paulo");
 		ZonedDateTime dataHoraUtcNegativo3 = ZonedDateTime.now(fusoHorario);
-		return dataHoraUtcNegativo3;
+		return Date.from(dataHoraUtcNegativo3.toInstant());
 	}
 
 	public void deletarUsuario(Long id) {

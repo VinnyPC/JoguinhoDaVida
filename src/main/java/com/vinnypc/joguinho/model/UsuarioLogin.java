@@ -1,6 +1,7 @@
 package com.vinnypc.joguinho.model;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class UsuarioLogin {
 

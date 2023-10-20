@@ -12,8 +12,10 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Component;
 
 @Entity
+@Component
 @Table(name = "tb_missoes_usuario")
 public class MissoesUsuario extends MissaoBase {
 
@@ -77,6 +79,8 @@ public class MissoesUsuario extends MissaoBase {
 	public void setDataAtivacao(Date dataAtivacao) {
 		this.dataAtivacao = dataAtivacao;
 	}
+
+
 	
 	
 

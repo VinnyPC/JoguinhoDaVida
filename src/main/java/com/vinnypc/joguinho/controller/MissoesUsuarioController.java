@@ -3,6 +3,7 @@ package com.vinnypc.joguinho.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.vinnypc.joguinho.service.MissoesUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ public class MissoesUsuarioController {
 
 	@Autowired 
 	private MissoesUsuarioRepository missoesUsuarioRepository;
+	@Autowired
+	private MissoesUsuarioService missoesUsuarioService;
 
 	@GetMapping
 	public ResponseEntity<List<MissoesUsuario>> getAll() {

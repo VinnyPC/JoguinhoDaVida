@@ -3,17 +3,14 @@ package com.vinnypc.joguinho.service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoZonedDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.vinnypc.joguinho.model.Missao;
 import com.vinnypc.joguinho.model.MissoesUsuario;
 import com.vinnypc.joguinho.model.Usuario;
-import com.vinnypc.joguinho.model.UsuarioLogin;
 import com.vinnypc.joguinho.repository.MissoesUsuarioRepository;
 
 @Service
@@ -21,6 +18,9 @@ public class MissoesUsuarioService {
 
 	@Autowired
 	private MissoesUsuarioRepository missoesUsuarioRepository;
+
+	@Autowired
+	private MissoesUsuario missoesUsuario;
 
 	public void ativarMissao(Usuario usuario, Missao missao, Date data) {
 		MissoesUsuario missaoUsuario = new MissoesUsuario();
@@ -46,8 +46,21 @@ public class MissoesUsuarioService {
 		ZonedDateTime zonedDateTimeVencimento = dataVencimentoLocal.atStartOfDay(ZoneId.systemDefault());
 		return Date.from(zonedDateTimeVencimento.toInstant());
 	}
-	
-	
+
+
+	public void verificaVencimentoMissao(Date dataAutenticacao){
+		if (dataAutenticacao.after(missoesUsuario.getDataVencimento())) {
+			missoesUsuarioRepository.atualizarStatusMissoesVencidas(dataAutenticacao);
+		} else if (dataAutenticacao.before(missoesUsuario.getDataVencimento())) {
+			missoesUsuarioRepository.atualizarStatusMissoesVencidas(dataAutenticacao);
+		}
+	}
+
+//	public void atualizarStatusMissaoVencida(Date dataAtual) {
+//		missoesUsuarioRepository.atualizarStatusMissoesVencidas(dataAtual);
+//	}
+
+
 	// Exibir missão vencida ao usuário no frontend pra saber se ele concluiu usando esse metodo vvvvv
 //	public void verificarMissaoComPrazoExpirado(UsuarioLogin usuarioLogin) {
 //		ZonedDateTime dataAutenticacao = usuarioLogin.getDataAutenticacao();
